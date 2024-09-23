@@ -3,7 +3,6 @@ const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const connectDB = require('./connection.js');
 const authRoutes = require('./authenticationRoute');
 const drawingRoutes = require('./drawingroutes');
 
@@ -43,7 +42,6 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3001;
 
-connectDB();
 
 // Express CORS for all localhost origins
 app.use(cors({
