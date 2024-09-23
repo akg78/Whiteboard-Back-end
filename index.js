@@ -15,7 +15,7 @@ connectDB();
 const app = express();
 
 // Create an HTTP server and attach the Express app to it
-const server = http.createServer();
+const server = http.createServer(app);
 
 // Attach Socket.IO to the HTTP server
 const io = new Server(server, {
