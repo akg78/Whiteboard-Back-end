@@ -18,9 +18,7 @@ const app = express();
 const server = http.createServer(app);
 
 // Attach Socket.IO to the HTTP server
-const io = new Server(server, {
-  path: '/socket.io/',
-});
+const io = new Server(server);
 
 
 // Socket.IO connection and events
