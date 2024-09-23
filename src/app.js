@@ -9,7 +9,21 @@ const drawingRoutes = require('./drawingroutes');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+
+// Socket.io CORS for all localhost origins
+const io = socketIo(server, {
+  cors: {
+    origin: (origin, callback) => {
+      if (!origin || origin.startsWith('http://localhost')) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+});
 
 io.on('connection', (socket) => {
   console.log('A user connected');
@@ -31,7 +45,17 @@ const PORT = process.env.PORT || 3001;
 
 connectDB();
 
-app.use(cors());
+// Express CORS for all localhost origins
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || origin.startsWith('http://localhost')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
 app.use(bodyParser.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/drawings', drawingRoutes);
