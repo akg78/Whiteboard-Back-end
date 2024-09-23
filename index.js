@@ -19,18 +19,11 @@ const server = http.createServer(app);
 // Attach Socket.IO to the HTTP server
 const io = socketIo(server, {
   cors: {
-    origin: (origin, callback) => {
-      if (!origin || origin.startsWith('http://localhost')) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    methods: ['GET', 'POST'],
-    credentials: true,
+    origin: "*", // Allow all origins
+    methods: ['GET', 'POST'], // Allow both GET and POST methods
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   },
 });
-
 // Socket.IO connection and events
 io.on('connection', (socket) => {
   console.log('A user connected');
