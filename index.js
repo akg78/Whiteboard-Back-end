@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
+const { Server } = require('socket.io');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./src/connection'); // MongoDB or other DB connection
@@ -14,21 +15,18 @@ connectDB();
 const app = express();
 
 // Create an HTTP server and attach the Express app to it
-const server = http.createServer(app);
+const server = http.createServer();
 
 // Attach Socket.IO to the HTTP server
-const io = socketIo(server, {
-  cors: {
-    origin: ['http://localhost:5173', 'https://collaborativewhiteboardapp.vercel.app'], // Allow all origins
-    methods: ['GET', 'POST'], // Allow both GET and POST methods
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-  },
+const io = new Server(server, {
+  path: '/socket.io/',
 });
+
 
 // Socket.IO connection and events
 io.on('connection', (socket) => {
   console.log('A user connected');
-
+  
   // Broadcast drawing data to all other clients
   socket.on('draw', (pathData) => {
     socket.broadcast.emit('draw', pathData);
