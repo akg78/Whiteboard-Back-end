@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const connectDB = require('./connection.js');
-const authRoutes = require('./routes/auth');
-const drawingRoutes = require('./routes/drawings');
+const connectDB = require('./src/connection');
+const authRoutes = require('./src/authenticationRoute');
+const drawingRoutes = require('./src/drawingroutes');
+
 
 const app = express();
 const PORT = process.env.PORT || 3001;
