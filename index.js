@@ -30,11 +30,17 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
   console.log('A user connected');
 
+  // Handle drawing data
+  socket.on('draw', (pathData) => {
+    socket.broadcast.emit('draw', pathData); // Send the drawing data to all other clients
+  });
+
   // Handle disconnection
   socket.on('disconnect', () => {
     console.log('A user disconnected');
   });
 });
+
 
 // Middleware for handling API requests
 app.use(cors({
