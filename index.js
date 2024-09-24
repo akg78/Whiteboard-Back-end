@@ -17,10 +17,17 @@ const app = express();
 // Create an HTTP server and attach the Express app to it
 const server = http.createServer(app);
 
+
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'https://collaborativewhiteboardapp.vercel.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+}));
+
 // Attach Socket.IO to the HTTP server
 const io = socketIo(server, {
   cors: {
-    origin: ['http://localhost:5173', 'https://collaborativewhiteboardapp.vercel.app'],
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'https://collaborativewhiteboardapp.vercel.app'],
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -32,7 +39,8 @@ io.on('connection', (socket) => {
 
   // Handle drawing data
   socket.on('draw', (pathData) => {
-    socket.broadcast.emit('draw', pathData); // Send the drawing data to all other clients
+    console.log("recived the path", pathData)
+    socket.broadcast.emit('draw', pathData);
   });
 
   // Handle disconnection
@@ -41,13 +49,6 @@ io.on('connection', (socket) => {
   });
 });
 
-
-// Middleware for handling API requests
-app.use(cors({
-  origin: ['http://localhost:5173', 'https://collaborativewhiteboardapp.vercel.app'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-}));
 app.use(bodyParser.json());
 
 // API routes
