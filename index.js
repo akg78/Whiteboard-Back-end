@@ -18,22 +18,17 @@ const app = express();
 const server = http.createServer(app);
 
 // Attach Socket.IO to the HTTP server
-const io = new Server(server);
-
+const io = socketIo(server, {
+  cors: {
+    origin: ['http://localhost:5173', 'https://whiteboard-back-end.vercel.app'],
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+});
 
 // Socket.IO connection and events
 io.on('connection', (socket) => {
   console.log('A user connected');
-  
-  // Broadcast drawing data to all other clients
-  socket.on('draw', (pathData) => {
-    socket.broadcast.emit('draw', pathData);
-  });
-
-  // Broadcast chat messages to all clients
-  socket.on('chatMessage', (message) => {
-    io.emit('chatMessage', message);
-  });
 
   // Handle disconnection
   socket.on('disconnect', () => {
@@ -42,7 +37,11 @@ io.on('connection', (socket) => {
 });
 
 // Middleware for handling API requests
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://whiteboard-back-end.vercel.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 app.use(bodyParser.json());
 
 // API routes
@@ -54,5 +53,5 @@ const PORT = process.env.PORT || 3001;
 
 // Start the server (for both Express APIs and Socket.IO)
 server.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+  console.log(`Server is listening on port ${PORT}`);
 });
