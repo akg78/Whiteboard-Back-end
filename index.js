@@ -20,7 +20,7 @@ const server = http.createServer(app);
 // Attach Socket.IO to the HTTP server
 const io = socketIo(server, {
   cors: {
-    origin: ['http://localhost:5173', 'https://whiteboard-back-end.vercel.app'],
+    origin: ['http://localhost:5173', 'https://collaborativewhiteboardapp.vercel.app'],
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
 
 // Middleware for handling API requests
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://whiteboard-back-end.vercel.app'],
+  origin: ['http://localhost:5173', 'https://collaborativewhiteboardapp.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
